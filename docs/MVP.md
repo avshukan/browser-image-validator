@@ -41,11 +41,13 @@ The package should expose one main function.
 
 Example direction:
 
-    const result = await validateImage(file, {
-        maxFileSizeBytes: 2 * 1024 * 1024,
-        maxWidth: 4096,
-        maxHeight: 4096,
-    });
+```ts
+const result = await validateImage(file, {
+    maxFileSizeBytes: 2 * 1024 * 1024,
+    maxWidth: 4096,
+    maxHeight: 4096,
+});
+```
 
 The exact API is not final yet.
 
@@ -55,20 +57,22 @@ The result should be typed.
 
 Example direction:
 
-    type ValidateImageResult =
-        | {
-              valid: true;
-              image: {
-                  width: number;
-                  height: number;
-                  size: number;
-                  type: string;
-              };
-          }
-        | {
-              valid: false;
-              errors: ImageValidationError[];
+```ts
+type ValidateImageResult =
+    | {
+          valid: true;
+          image: {
+              width: number;
+              height: number;
+              size: number;
+              type: string;
           };
+      }
+    | {
+          valid: false;
+          errors: ImageValidationError[];
+      };
+```
 
 The exact result model is not final yet.
 
