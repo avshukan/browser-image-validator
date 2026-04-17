@@ -121,10 +121,10 @@ const INCLUDE =
     customPaths.length > 0
         ? customPaths
         : [
-              ...INCLUDE_MIN,
-              ...(noSrc ? [] : INCLUDE_SRC),
-              ...(isFull ? INCLUDE_FULL_EXTRA : []),
-          ];
+            ...INCLUDE_MIN,
+            ...(noSrc ? [] : INCLUDE_SRC),
+            ...(isFull ? INCLUDE_FULL_EXTRA : []),
+        ];
 
 // --- exclude rules ---
 
@@ -247,12 +247,12 @@ function getRepoTree() {
             [
                 'find .',
                 "\\( -path './node_modules' -o",
-                "-path './.git' -prune -o",
-                "-path './dist' -prune -o",
-                "-path './build' -prune -o",
-                "-path './coverage' -prune -o",
+                "-path './.git' -o",
+                "-path './dist' -o",
+                "-path './build' -o",
+                "-path './coverage' -o",
                 "-path './.vite' \\) -prune -o",
-                '-type f',
+                '-type f -print',
                 "| sed 's#^\\./##'",
                 '| sort',
             ].join(' '),
