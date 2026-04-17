@@ -1,0 +1,28 @@
+{
+  "name": "browser-image-validator",
+  "version": "1.0.0",
+  "description": "Small TypeScript utility for validating browser image files by MIME type, file size, and image dimensions.",
+  "type": "module",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avshukan/browser-image-validator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/avshukan/browser-image-validator/issues"
+  },
+  "homepage": "https://github.com/avshukan/browser-image-validator#readme",
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}
