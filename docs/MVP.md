@@ -118,6 +118,7 @@ The following features are intentionally excluded:
 - server-side image validation
 - upload logic
 - UI error messages
+- React, Vue, or framework-specific integrations
 
 ## Success criteria
 
