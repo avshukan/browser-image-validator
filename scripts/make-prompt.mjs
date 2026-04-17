@@ -90,17 +90,9 @@ const customPaths = getArgValues('--paths');
 
 // --- include sets ---
 
-const INCLUDE_MIN = [
-    'README.md',
-    'LICENSE',
-    'CHANGELOG.md',
-    'package.json',
-    'docs',
-];
+const INCLUDE_MIN = ['README.md', 'LICENSE', 'CHANGELOG.md', 'package.json', 'docs'];
 
-const INCLUDE_SRC = [
-    'src',
-];
+const INCLUDE_SRC = ['src'];
 
 const INCLUDE_FULL_EXTRA = [
     '.github/workflows',
@@ -120,40 +112,15 @@ const INCLUDE_FULL_EXTRA = [
 const INCLUDE =
     customPaths.length > 0
         ? customPaths
-        : [
-            ...INCLUDE_MIN,
-            ...(noSrc ? [] : INCLUDE_SRC),
-            ...(isFull ? INCLUDE_FULL_EXTRA : []),
-        ];
+        : [...INCLUDE_MIN, ...(noSrc ? [] : INCLUDE_SRC), ...(isFull ? INCLUDE_FULL_EXTRA : [])];
 
 // --- exclude rules ---
 
-const EXCLUDE_DIRS = new Set([
-    'node_modules',
-    '.git',
-    'dist',
-    'build',
-    'coverage',
-    '.vite',
-]);
+const EXCLUDE_DIRS = new Set(['node_modules', '.git', 'dist', 'build', 'coverage', '.vite']);
 
-const EXCLUDE_FILES = new Set([
-    'package-lock.json',
-    '.DS_Store',
-    'prompt.txt',
-]);
+const EXCLUDE_FILES = new Set(['package-lock.json', '.DS_Store', 'prompt.txt']);
 
-const BINARY_EXT = new Set([
-    '.png',
-    '.jpg',
-    '.jpeg',
-    '.webp',
-    '.gif',
-    '.ico',
-    '.mp4',
-    '.mov',
-    '.zip',
-]);
+const BINARY_EXT = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif', '.ico', '.mp4', '.mov', '.zip']);
 
 function rel(p) {
     return path.relative(ROOT, p).replaceAll('\\', '/');
