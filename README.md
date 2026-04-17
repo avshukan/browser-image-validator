@@ -1,6 +1,6 @@
 # browser-image-validator
 
-Small TypeScript utility for validating browser image files by file size and image dimensions.
+Small TypeScript utility for validating browser image files by MIME type, file size, and image dimensions.
 
 ## Status
 
@@ -37,6 +37,9 @@ The result will be typed and suitable for TypeScript projects.
 - EXIF support
 - aspect ratio validation
 - content-based MIME validation
+- server-side image validation
+- upload logic
+- UI error messages
 - React, Vue, or framework-specific integrations
 
 ## License
