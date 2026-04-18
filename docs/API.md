@@ -4,14 +4,18 @@
 
 The package exposes one main function:
 
-    validateImage(file, options)
+```
+validateImage(file, options)
+```
 
 ## Function signature
 
-    export async function validateImage(
-        file: File,
-        options: ValidateImageOptions,
-    ): Promise<ValidateImageResult>;
+```
+export async function validateImage(
+    file: File,
+    options: ValidateImageOptions,
+): Promise<ValidateImageResult>;
+```
 
 ## Options
 
@@ -19,50 +23,62 @@ The package exposes one main function:
 
 All properties inside `options` are optional.
 
-    export type ValidateImageOptions = {
-        allowedMimeTypes?: string[];
-        maxFileSizeBytes?: number;
-        maxWidth?: number;
-        maxHeight?: number;
-    };
+```
+export type ValidateImageOptions = {
+    allowedMimeTypes?: string[];
+    maxFileSizeBytes?: number;
+    maxWidth?: number;
+    maxHeight?: number;
+};
+```
 
 ## Result
 
 The function returns a typed discriminated union.
 
-    export type ValidateImageResult =
-        | {
-              valid: true;
-              image: ValidatedImageInfo;
-          }
-        | {
-              valid: false;
-              errors: ImageValidationError[];
-          };
+```
+export type ValidateImageResult =
+    | {
+            valid: true;
+            image: ValidatedImageInfo;
+        }
+    | {
+            valid: false;
+            errors: ImageValidationError[];
+        };
+```
 
 ## Success result
 
-    export type ValidatedImageInfo = {
-        mimeType: string;
-        sizeBytes: number;
-        width: number;
-        height: number;
-    };
+```
+export type ValidatedImageInfo = {
+    mimeType: string;
+    sizeBytes: number;
+    width: number;
+    height: number;
+};
+```
 
 ## Error result
 
-    export type ImageValidationError = {
-        code: ImageValidationErrorCode;
-    };
+```
+export type ImageValidationError = {
+    code: ImageValidationErrorCode;
+};
+```
+
+Error objects intentionally contain only machine-readable codes.
 
 ## Error codes
 
-    export type ImageValidationErrorCode =
-        | 'INVALID_FILE_TYPE'
-        | 'FILE_TOO_LARGE'
-        | 'IMAGE_WIDTH_TOO_LARGE'
-        | 'IMAGE_HEIGHT_TOO_LARGE'
-        | 'IMAGE_LOAD_FAILED';
+```
+export type ImageValidationErrorCode =
+    | 'INVALID_FILE_TYPE'
+    | 'FILE_TOO_LARGE'
+    | 'IMAGE_WIDTH_TOO_LARGE'
+    | 'IMAGE_HEIGHT_TOO_LARGE'
+    | 'IMAGE_LOAD_FAILED';
+```
 
 ## Behavior rules
 
@@ -75,13 +91,23 @@ The function returns a typed discriminated union.
 
 ### Validation order
 
-The validation flow is expected to work in this order:
+The validation flow works in this order:
 
 1. validate MIME type
 2. validate file size
 3. load image
 4. validate width
 5. validate height
+
+The function does not use early exit for MIME type or file size validation.
+
+The function always attempts to load the image.
+
+If image loading fails, the function adds `IMAGE_LOAD_FAILED`.
+
+If image loading fails, width and height checks are not performed.
+
+Any MIME type or file size errors collected before image loading failure are preserved in the final result.
 
 ### MIME type validation
 
@@ -90,6 +116,10 @@ If `allowedMimeTypes` is provided, the function checks whether `file.type` is in
 If not included, the function adds:
 
 - `INVALID_FILE_TYPE`
+
+If `allowedMimeTypes` is an empty array, no MIME type is allowed.
+
+MIME type validation is based on browser-provided `file.type` and does not inspect the actual file contents.
 
 ### File size validation
 
@@ -101,13 +131,11 @@ If it exceeds the limit, the function adds:
 
 ### Image loading
 
-The function attempts to load the image only when dimension checks are needed.
+The function always attempts to load the image in order to obtain image dimensions for the success result.
 
 If image loading fails, the function adds:
 
 - `IMAGE_LOAD_FAILED`
-
-If image loading fails, width and height checks are not performed.
 
 ### Width validation
 
@@ -123,16 +151,18 @@ If `maxHeight` is provided and the loaded image height exceeds that limit, the f
 
 ## Example usage
 
-    const result = await validateImage(file, {
-        allowedMimeTypes: ['image/jpeg', 'image/png'],
-        maxFileSizeBytes: 2 * 1024 * 1024,
-        maxWidth: 4096,
-        maxHeight: 4096,
-    });
+```
+const result = await validateImage(file, {
+    allowedMimeTypes: ['image/jpeg', 'image/png'],
+    maxFileSizeBytes: 2 * 1024 * 1024,
+    maxWidth: 4096,
+    maxHeight: 4096,
+});
 
-    if (!result.valid) {
-        console.log(result.errors);
-    }
+if (!result.valid) {
+    console.log(result.errors);
+}
+```
 
 ## Non-goals for this API
 
