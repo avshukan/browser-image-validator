@@ -4,13 +4,13 @@
 
 The package exposes one main function:
 
-```
+```typescript
 validateImage(file, options)
 ```
 
 ## Function signature
 
-```
+```typescript
 export async function validateImage(
     file: File,
     options: ValidateImageOptions,
@@ -23,7 +23,7 @@ export async function validateImage(
 
 All properties inside `options` are optional.
 
-```
+```typescript
 export type ValidateImageOptions = {
     allowedMimeTypes?: string[];
     maxFileSizeBytes?: number;
@@ -36,21 +36,21 @@ export type ValidateImageOptions = {
 
 The function returns a typed discriminated union.
 
-```
+```typescript
 export type ValidateImageResult =
     | {
-            valid: true;
-            image: ValidatedImageInfo;
-        }
+          valid: true;
+          image: ValidatedImageInfo;
+      }
     | {
-            valid: false;
-            errors: ImageValidationError[];
-        };
+          valid: false;
+          errors: ImageValidationError[];
+      };
 ```
 
 ## Success result
 
-```
+```typescript
 export type ValidatedImageInfo = {
     mimeType: string;
     sizeBytes: number;
@@ -61,7 +61,7 @@ export type ValidatedImageInfo = {
 
 ## Error result
 
-```
+```typescript
 export type ImageValidationError = {
     code: ImageValidationErrorCode;
 };
@@ -71,7 +71,7 @@ Error objects intentionally contain only machine-readable codes.
 
 ## Error codes
 
-```
+```typescript
 export type ImageValidationErrorCode =
     | 'INVALID_FILE_TYPE'
     | 'FILE_TOO_LARGE'
@@ -151,7 +151,7 @@ If `maxHeight` is provided and the loaded image height exceeds that limit, the f
 
 ## Example usage
 
-```
+```typescript
 const result = await validateImage(file, {
     allowedMimeTypes: ['image/jpeg', 'image/png'],
     maxFileSizeBytes: 2 * 1024 * 1024,
