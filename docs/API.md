@@ -5,7 +5,7 @@
 The package exposes one main function:
 
 ```typescript
-validateImage(file, options)
+validateImage(file, options): Promise<ValidateImageResult>
 ```
 
 ## Function signature
@@ -128,6 +128,8 @@ If `maxFileSizeBytes` is provided, the function checks whether `file.size` excee
 If it exceeds the limit, the function adds:
 
 - `FILE_TOO_LARGE`
+
+If `maxFileSizeBytes` is `0`, no file size is allowed.
 
 ### Image loading
 
