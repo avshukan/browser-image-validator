@@ -42,7 +42,7 @@ The function returns a typed discriminated union.
 export type ValidateImageResult =
     | {
           valid: true;
-          image: ValidatedImageInfo;
+          file: ValidatedImageInfo;
       }
     | {
           valid: false;
