@@ -27,8 +27,10 @@ All properties inside `options` are optional.
 export type ValidateImageOptions = {
     allowedMimeTypes?: string[];
     maxFileSizeBytes?: number;
-    maxWidth?: number;
-    maxHeight?: number;
+    dimensions?: {
+        maxWidth?: number;
+        maxHeight?: number;
+    };
 };
 ```
 
@@ -54,8 +56,10 @@ export type ValidateImageResult =
 export type ValidatedImageInfo = {
     mimeType: string;
     sizeBytes: number;
-    width: number;
-    height: number;
+    dimensions?: {
+        width: number;
+        height: number;
+    };
 };
 ```
 
@@ -95,19 +99,21 @@ The validation flow works in this order:
 
 1. validate MIME type
 2. validate file size
-3. load image
+3. load image if `options.dimensions` is provided
 4. validate width
 5. validate height
 
 The function does not use early exit for MIME type or file size validation.
 
-The function always attempts to load the image.
+The function loads the image only when `options.dimensions` is provided.
 
 If image loading fails, the function adds `IMAGE_LOAD_FAILED`.
 
 If image loading fails, width and height checks are not performed.
 
 Any MIME type or file size errors collected before image loading failure are preserved in the final result.
+
+If `options.dimensions` is not provided, the function does not load the image and does not include dimensions in the success result.
 
 ### MIME type validation
 
@@ -133,7 +139,7 @@ If `maxFileSizeBytes` is `0`, no file size is allowed.
 
 ### Image loading
 
-The function always attempts to load the image in order to obtain image dimensions for the success result.
+The function attempts to load the image only when `options.dimensions` is provided.
 
 If image loading fails, the function adds:
 
@@ -141,13 +147,13 @@ If image loading fails, the function adds:
 
 ### Width validation
 
-If `maxWidth` is provided and the loaded image width exceeds that limit, the function adds:
+If `options.dimensions?.maxWidth` is provided and the loaded image width exceeds that limit, the function adds:
 
 - `IMAGE_WIDTH_TOO_LARGE`
 
 ### Height validation
 
-If `maxHeight` is provided and the loaded image height exceeds that limit, the function adds:
+If `options.dimensions?.maxHeight` is provided and the loaded image height exceeds that limit, the function adds:
 
 - `IMAGE_HEIGHT_TOO_LARGE`
 
@@ -157,8 +163,10 @@ If `maxHeight` is provided and the loaded image height exceeds that limit, the f
 const result = await validateImage(file, {
     allowedMimeTypes: ['image/jpeg', 'image/png'],
     maxFileSizeBytes: 2 * 1024 * 1024,
-    maxWidth: 4096,
-    maxHeight: 4096,
+    dimensions: {
+        maxWidth: 4096,
+        maxHeight: 4096,
+    },
 });
 
 if (!result.valid) {
