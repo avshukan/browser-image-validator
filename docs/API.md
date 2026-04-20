@@ -115,6 +115,8 @@ Any MIME type or file size errors collected before image loading failure are pre
 
 If `options.dimensions` is not provided, the function does not load the image and does not include dimensions in the success result.
 
+If `options.dimensions` is provided as an empty object, it is treated the same as if `options.dimensions` was not provided.
+
 ### MIME type validation
 
 If `allowedMimeTypes` is provided, the function checks whether `file.type` is included in that list.
@@ -144,6 +146,10 @@ The function attempts to load the image only when `options.dimensions` is provid
 If image loading fails, the function adds:
 
 - `IMAGE_LOAD_FAILED`
+
+If `allowedMimeTypes` is not provided and `options.dimensions` is not provided, a non-image file may still produce a successful result as long as all enabled checks pass.
+
+The function validates only the rules that are explicitly configured.
 
 ### Width validation
 
