@@ -30,7 +30,7 @@ export type ValidatedImageInfo = {
 export type ValidateImageResult =
     | {
           valid: true;
-          file: ValidatedImageInfo;
+          image: ValidatedImageInfo;
       }
     | {
           valid: false;
