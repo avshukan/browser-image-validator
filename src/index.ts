@@ -112,8 +112,9 @@ export async function validateImage(
     }
 
     const shouldReadDimensions =
-        options.dimensions?.maxWidth !== undefined ||
-        options.dimensions?.maxHeight !== undefined;
+        errors.length === 0 &&
+        (options.dimensions?.maxWidth !== undefined ||
+            options.dimensions?.maxHeight !== undefined);
 
     let dimensions: ValidatedImageInfo['dimensions'];
 
@@ -148,12 +149,17 @@ export async function validateImage(
         };
     }
 
+    const image: ValidatedImageInfo = {
+        mimeType: file.type,
+        sizeBytes: file.size,
+    };
+
+    if (dimensions !== undefined) {
+        image.dimensions = dimensions;
+    }
+
     return {
         valid: true,
-        image: {
-            mimeType: file.type,
-            sizeBytes: file.size,
-            ...(dimensions === undefined ? {} : { dimensions }),
-        },
+        image,
     };
 }

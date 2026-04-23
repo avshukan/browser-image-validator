@@ -122,6 +122,22 @@ describe('validateImage', () => {
         });
     });
 
+    it('accepts a file whose size is exactly at the configured limit', async () => {
+        const file = createFile();
+
+        const result = await validateImage(file, {
+            maxFileSizeBytes: file.size,
+        });
+
+        expect(result).toEqual({
+            valid: true,
+            image: {
+                mimeType: 'image/png',
+                sizeBytes: 12,
+            },
+        });
+    });
+
     it('loads image dimensions and returns them on success', async () => {
         mockImageLoading({
             type: 'load',
@@ -174,14 +190,30 @@ describe('validateImage', () => {
         });
     });
 
-    it('preserves earlier errors when image loading fails', async () => {
+    it('preserves earlier errors when image loading fails after passing sync checks', async () => {
         mockImageLoading({ type: 'error' });
 
+        const result = await validateImage(createFile(), {
+            allowedMimeTypes: ['image/png'],
+            maxFileSizeBytes: 100,
+            dimensions: {
+                maxWidth: 100,
+            },
+        });
+
+        expect(result).toEqual({
+            valid: false,
+            errors: [{ code: 'IMAGE_LOAD_FAILED' }],
+        });
+    });
+
+    it('skips reading dimensions when MIME type or file size already failed', async () => {
         const result = await validateImage(createFile({ type: 'text/plain' }), {
             allowedMimeTypes: ['image/png'],
             maxFileSizeBytes: 0,
             dimensions: {
                 maxWidth: 100,
+                maxHeight: 100,
             },
         });
 
@@ -190,8 +222,8 @@ describe('validateImage', () => {
             errors: [
                 { code: 'INVALID_FILE_TYPE' },
                 { code: 'FILE_TOO_LARGE' },
-                { code: 'IMAGE_LOAD_FAILED' },
             ],
         });
+        expect(createObjectURLMock).not.toHaveBeenCalled();
     });
 });
