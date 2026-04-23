@@ -37,10 +37,7 @@ export type ValidateImageResult =
           errors: ImageValidationError[];
       };
 
-function validateMimeType(
-    file: File,
-    allowedMimeTypes: string[] | undefined,
-): ImageValidationError | null {
+function validateMimeType(file: File, allowedMimeTypes: string[] | undefined): ImageValidationError | null {
     if (allowedMimeTypes === undefined) {
         return null;
     }
@@ -52,10 +49,7 @@ function validateMimeType(
     return null;
 }
 
-function validateFileSize(
-    file: File,
-    maxFileSizeBytes: number | undefined,
-): ImageValidationError | null {
+function validateFileSize(file: File, maxFileSizeBytes: number | undefined): ImageValidationError | null {
     if (maxFileSizeBytes === undefined) {
         return null;
     }
@@ -67,9 +61,7 @@ function validateFileSize(
     return null;
 }
 
-async function readImageDimensions(
-    file: File,
-): Promise<NonNullable<ValidatedImageInfo['dimensions']>> {
+async function readImageDimensions(file: File): Promise<NonNullable<ValidatedImageInfo['dimensions']>> {
     return new Promise((resolve, reject) => {
         const imageUrl = URL.createObjectURL(file);
         const image = new Image();
@@ -95,10 +87,7 @@ async function readImageDimensions(
     });
 }
 
-export async function validateImage(
-    file: File,
-    options: ValidateImageOptions,
-): Promise<ValidateImageResult> {
+export async function validateImage(file: File, options: ValidateImageOptions): Promise<ValidateImageResult> {
     const errors: ImageValidationError[] = [];
 
     const mimeTypeError = validateMimeType(file, options.allowedMimeTypes);
@@ -113,8 +102,7 @@ export async function validateImage(
 
     const shouldReadDimensions =
         errors.length === 0 &&
-        (options.dimensions?.maxWidth !== undefined ||
-            options.dimensions?.maxHeight !== undefined);
+        (options.dimensions?.maxWidth !== undefined || options.dimensions?.maxHeight !== undefined);
 
     let dimensions: ValidatedImageInfo['dimensions'];
 
@@ -127,17 +115,11 @@ export async function validateImage(
     }
 
     if (dimensions !== undefined) {
-        if (
-            options.dimensions?.maxWidth !== undefined &&
-            dimensions.width > options.dimensions.maxWidth
-        ) {
+        if (options.dimensions?.maxWidth !== undefined && dimensions.width > options.dimensions.maxWidth) {
             errors.push({ code: 'IMAGE_WIDTH_TOO_LARGE' });
         }
 
-        if (
-            options.dimensions?.maxHeight !== undefined &&
-            dimensions.height > options.dimensions.maxHeight
-        ) {
+        if (options.dimensions?.maxHeight !== undefined && dimensions.height > options.dimensions.maxHeight) {
             errors.push({ code: 'IMAGE_HEIGHT_TOO_LARGE' });
         }
     }
