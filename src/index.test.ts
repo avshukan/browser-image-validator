@@ -2,6 +2,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { validateImage } from './index.js';
 
+const FILE_CONTENT = 'file-content';
+
 type ImageLoadOutcome =
     | {
           type: 'load';
@@ -48,7 +50,7 @@ vi.stubGlobal('URL', {
 });
 
 function createFile(options?: { type?: string; contents?: string }) {
-    return new File([options?.contents ?? 'file-content'], 'test-image.bin', {
+    return new File([options?.contents ?? FILE_CONTENT], 'test-image.bin', {
         type: options?.type ?? 'image/png',
     });
 }
@@ -86,7 +88,7 @@ describe('validateImage', () => {
             valid: true,
             image: {
                 mimeType: 'image/png',
-                sizeBytes: 12,
+                sizeBytes: FILE_CONTENT.length,
             },
         });
         expect(createObjectURLMock).not.toHaveBeenCalled();
@@ -101,7 +103,7 @@ describe('validateImage', () => {
             valid: true,
             image: {
                 mimeType: 'image/png',
-                sizeBytes: 12,
+                sizeBytes: FILE_CONTENT.length,
             },
         });
         expect(createObjectURLMock).not.toHaveBeenCalled();
@@ -133,7 +135,7 @@ describe('validateImage', () => {
             valid: true,
             image: {
                 mimeType: 'image/png',
-                sizeBytes: 12,
+                sizeBytes: FILE_CONTENT.length,
             },
         });
     });
@@ -156,7 +158,7 @@ describe('validateImage', () => {
             valid: true,
             image: {
                 mimeType: 'image/png',
-                sizeBytes: 12,
+                sizeBytes: FILE_CONTENT.length,
                 dimensions: {
                     width: 800,
                     height: 600,
@@ -187,6 +189,51 @@ describe('validateImage', () => {
                 { code: 'IMAGE_WIDTH_TOO_LARGE' },
                 { code: 'IMAGE_HEIGHT_TOO_LARGE' },
             ],
+        });
+    });
+
+    it('passes when only maxWidth is configured and the width is within the limit', async () => {
+        mockImageLoading({
+            type: 'load',
+            width: 800,
+            height: 1200,
+        });
+
+        const result = await validateImage(createFile(), {
+            dimensions: {
+                maxWidth: 1024,
+            },
+        });
+
+        expect(result).toEqual({
+            valid: true,
+            image: {
+                mimeType: 'image/png',
+                sizeBytes: FILE_CONTENT.length,
+                dimensions: {
+                    width: 800,
+                    height: 1200,
+                },
+            },
+        });
+    });
+
+    it('fails when only maxHeight is configured and the height exceeds the limit', async () => {
+        mockImageLoading({
+            type: 'load',
+            width: 800,
+            height: 900,
+        });
+
+        const result = await validateImage(createFile(), {
+            dimensions: {
+                maxHeight: 768,
+            },
+        });
+
+        expect(result).toEqual({
+            valid: false,
+            errors: [{ code: 'IMAGE_HEIGHT_TOO_LARGE' }],
         });
     });
 
