@@ -113,8 +113,7 @@ export async function validateImage(
 
     const shouldReadDimensions =
         errors.length === 0 &&
-        (options.dimensions?.maxWidth !== undefined ||
-            options.dimensions?.maxHeight !== undefined);
+        (options.dimensions?.maxWidth !== undefined || options.dimensions?.maxHeight !== undefined);
 
     let dimensions: ValidatedImageInfo['dimensions'];
 

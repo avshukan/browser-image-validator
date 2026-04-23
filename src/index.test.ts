@@ -117,10 +117,7 @@ describe('validateImage', () => {
 
         expect(result).toEqual({
             valid: false,
-            errors: [
-                { code: 'INVALID_FILE_TYPE' },
-                { code: 'FILE_TOO_LARGE' },
-            ],
+            errors: [{ code: 'INVALID_FILE_TYPE' }, { code: 'FILE_TOO_LARGE' }],
         });
     });
 
@@ -185,10 +182,7 @@ describe('validateImage', () => {
 
         expect(result).toEqual({
             valid: false,
-            errors: [
-                { code: 'IMAGE_WIDTH_TOO_LARGE' },
-                { code: 'IMAGE_HEIGHT_TOO_LARGE' },
-            ],
+            errors: [{ code: 'IMAGE_WIDTH_TOO_LARGE' }, { code: 'IMAGE_HEIGHT_TOO_LARGE' }],
         });
     });
 
@@ -266,10 +260,7 @@ describe('validateImage', () => {
 
         expect(result).toEqual({
             valid: false,
-            errors: [
-                { code: 'INVALID_FILE_TYPE' },
-                { code: 'FILE_TOO_LARGE' },
-            ],
+            errors: [{ code: 'INVALID_FILE_TYPE' }, { code: 'FILE_TOO_LARGE' }],
         });
         expect(createObjectURLMock).not.toHaveBeenCalled();
     });

@@ -3,13 +3,32 @@
     "version": "1.0.0",
     "description": "Small TypeScript utility for validating browser image files by MIME type, file size, and image dimensions.",
     "type": "module",
-    "main": "index.js",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        }
+    },
+    "files": [
+        "dist/index.js",
+        "dist/index.js.map",
+        "dist/index.d.ts",
+        "dist/index.d.ts.map",
+        "README.md",
+        "LICENSE"
+    ],
     "directories": {
         "doc": "docs"
     },
     "scripts": {
+        "clean": "rimraf dist",
+        "build": "npm run clean && tsc -p tsconfig.build.json",
+        "prepublishOnly": "npm run build",
         "test": "vitest",
         "test:run": "vitest run",
+        "test:coverage": "vitest run --coverage",
         "typecheck": "tsc --noEmit",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
@@ -20,8 +39,18 @@
         "type": "git",
         "url": "git+https://github.com/avshukan/browser-image-validator.git"
     },
-    "keywords": [],
-    "author": "",
+    "keywords": [
+        "image",
+        "validation",
+        "browser",
+        "file",
+        "typescript",
+        "mime-type"
+    ],
+    "author": "avshukan <avshukan@gmail.com> (https://github.com/avshukan)",
+    "engines": {
+        "node": ">=22"
+    },
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/avshukan/browser-image-validator/issues"
@@ -29,9 +58,11 @@
     "homepage": "https://github.com/avshukan/browser-image-validator#readme",
     "devDependencies": {
         "@eslint/js": "^10.0.1",
+        "@vitest/coverage-v8": "^4.1.4",
         "eslint": "^10.2.0",
         "globals": "^17.5.0",
         "prettier": "^3.8.3",
+        "rimraf": "^6.1.3",
         "typescript": "^6.0.3",
         "typescript-eslint": "^8.58.2",
         "vitest": "^4.1.4"
