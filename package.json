@@ -47,7 +47,7 @@
         "typescript",
         "mime-type"
     ],
-    "author": "Александр Шукан (https://github.com/avshukan)",
+    "author": "avshukan <avshukan@gmail.com> (https://github.com/avshukan)",
     "engines": {
         "node": ">=22"
     },
