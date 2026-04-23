@@ -120,7 +120,17 @@ const EXCLUDE_DIRS = new Set(['node_modules', '.git', 'dist', 'build', 'coverage
 
 const EXCLUDE_FILES = new Set(['package-lock.json', '.DS_Store', 'prompt.txt']);
 
-const BINARY_EXT = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif', '.ico', '.mp4', '.mov', '.zip']);
+const BINARY_EXT = new Set([
+    '.png',
+    '.jpg',
+    '.jpeg',
+    '.webp',
+    '.gif',
+    '.ico',
+    '.mp4',
+    '.mov',
+    '.zip',
+]);
 
 function rel(p) {
     return path.relative(ROOT, p).replaceAll('\\', '/');

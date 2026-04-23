@@ -11,7 +11,10 @@ validateImage(file, options): Promise<ValidateImageResult>
 ## Function signature
 
 ```typescript
-export async function validateImage(file: File, options: ValidateImageOptions): Promise<ValidateImageResult>;
+export async function validateImage(
+    file: File,
+    options: ValidateImageOptions,
+): Promise<ValidateImageResult>;
 ```
 
 ## Options
