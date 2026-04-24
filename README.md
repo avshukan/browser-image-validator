@@ -1,20 +1,18 @@
 # browser-image-validator
 
 [![CI](https://github.com/avshukan/browser-image-validator/actions/workflows/ci.yml/badge.svg)](https://github.com/avshukan/browser-image-validator/actions/workflows/ci.yml)
-[![npm version](https://img.shields.io/npm/v/browser-image-validator)](https://www.npmjs.com/package/browser-image-validator)
-[![npm downloads](https://img.shields.io/npm/dm/browser-image-validator)](https://www.npmjs.com/package/browser-image-validator)
-[![Bundle size](https://img.shields.io/bundlephobia/minzip/browser-image-validator)](https://bundlephobia.com/package/browser-image-validator)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/node-%3E%3D22-brightgreen?logo=node.js)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
 Small TypeScript utility for validating browser image files by MIME type, file size, and image dimensions.
 
-## Installation
+> **Pre-release** — the package has not yet been published to npm. Installation via `npm install` will be available after the first release.
 
-```bash
-npm install browser-image-validator
-```
+## Requirements
+
+**Browser only** — uses the browser `File` API and `Image` constructor. Not intended for Node.js or server-side use.
+
+TypeScript 5+ is recommended for full type inference.
 
 ## Usage
 
@@ -32,78 +30,41 @@ const result = await validateImage(file, {
 
 if (result.valid) {
     console.log('Image is valid:', result.image);
-    // result.image: { mimeType, sizeBytes, dimensions?: { width, height } }
+    // { mimeType, sizeBytes, dimensions?: { width, height } }
 } else {
     console.error('Validation failed:', result.errors);
-    // result.errors: Array<{ code: ImageValidationErrorCode }>
+    // Array<{ code: ImageValidationErrorCode }>
 }
 ```
 
-## API
-
-### `validateImage(file, options)`
-
-Validates a browser `File` object against the provided constraints.
-
-**Parameters:**
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `file` | `File` | The browser `File` object to validate |
-| `options` | `ValidateImageOptions` | Validation constraints (all optional) |
-| `options.allowedMimeTypes` | `string[]` | Allowed MIME types (e.g. `['image/jpeg']`). If omitted, MIME type is not checked. |
-| `options.maxFileSizeBytes` | `number` | Maximum file size in bytes. If omitted, size is not checked. |
-| `options.dimensions.maxWidth` | `number` | Maximum image width in pixels. |
-| `options.dimensions.maxHeight` | `number` | Maximum image height in pixels. |
-
-**Returns:** `Promise<ValidateImageResult>`
-
-### Error codes
-
-| Code | Description |
-|------|-------------|
-| `INVALID_FILE_TYPE` | File MIME type is not in `allowedMimeTypes` |
-| `FILE_TOO_LARGE` | File size exceeds `maxFileSizeBytes` |
-| `IMAGE_WIDTH_TOO_LARGE` | Image width exceeds `maxWidth` |
-| `IMAGE_HEIGHT_TOO_LARGE` | Image height exceeds `maxHeight` |
-| `IMAGE_LOAD_FAILED` | Browser failed to decode the image |
-
-## Requirements
-
-- **Browser only** — the package uses the browser `File` API and `Image` constructor. It is not intended for Node.js or server-side use.
-- TypeScript 5+ recommended for full type inference.
+See [docs/API.md](./docs/API.md) for the full API reference including all types, options, error codes, and behavior details.
 
 ## Features
 
 - Validates MIME type
 - Validates file size
 - Validates image width and height (via browser image decoding)
-- Fully typed — results are discriminated unions, suitable for TypeScript projects
-- Framework-agnostic — works with any browser-based application
+- Fully typed — results are discriminated unions
+- Framework-agnostic
 
 ## Out of scope
 
-- image resize
-- crop
-- preview generation
+- image resize / crop / preview generation
 - drag-and-drop
 - localization
-- multiple files validation
-- async queue
-- EXIF support
-- aspect ratio validation
-- content-based MIME validation
-- server-side image validation
-- upload logic
-- UI error messages
+- multiple files validation / async queue
+- EXIF / aspect ratio / content-based MIME validation
+- server-side validation / upload logic / UI error messages
 - React, Vue, or framework-specific integrations
 
 ## Contributing
 
+Requires Node.js ≥ 22 (development/build toolchain only).
+
 ```bash
 npm ci
-npm run test        # run tests in watch mode
 npm run test:run    # run tests once
+npm run test        # run tests in watch mode
 npm run typecheck   # TypeScript type check
 npm run lint        # ESLint
 npm run format      # Prettier
