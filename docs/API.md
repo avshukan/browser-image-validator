@@ -99,19 +99,19 @@ The validation flow works in this order:
 
 1. validate MIME type
 2. validate file size
-3. load image if `options.dimensions` is provided
+3. load image if dimension limits are requested and there are no previous sync validation errors
 4. validate width
 5. validate height
 
-The function does not use early exit for MIME type or file size validation.
+The function always runs both MIME type and file size checks first.
 
-The function loads the image only when `options.dimensions` is provided.
+If either sync check fails, image loading is skipped.
+
+The function loads the image only when `options.dimensions?.maxWidth` or `options.dimensions?.maxHeight` is provided.
 
 If image loading fails, the function adds `IMAGE_LOAD_FAILED`.
 
 If image loading fails, width and height checks are not performed.
-
-Any MIME type or file size errors collected before image loading failure are preserved in the final result.
 
 If `options.dimensions` is not provided, the function does not load the image and does not include dimensions in the success result.
 
@@ -141,7 +141,7 @@ If `maxFileSizeBytes` is `0`, no file size is allowed.
 
 ### Image loading
 
-The function attempts to load the image only when `options.dimensions` is provided.
+The function attempts to load the image only when at least one dimension limit is provided and there are no previous MIME type or file size errors.
 
 If image loading fails, the function adds:
 
