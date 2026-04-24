@@ -1,46 +1,75 @@
 # browser-image-validator
 
+[![CI](https://github.com/avshukan/browser-image-validator/actions/workflows/ci.yml/badge.svg)](https://github.com/avshukan/browser-image-validator/actions/workflows/ci.yml)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
 Small TypeScript utility for validating browser image files by MIME type, file size, and image dimensions.
 
-## Status
+> **Pre-release** — the package has not yet been published to npm. Installation via `npm install` will be available after the first release.
 
-Project is in the initial planning stage.
+## Requirements
 
-No stable API yet.
+**Browser only** — uses the browser `File` API and `Image` constructor. Not intended for Node.js or server-side use.
 
-## Goal
+TypeScript 5+ is recommended for full type inference.
 
-Create a small, framework-agnostic npm package for validating image `File` objects in the browser.
+## Usage
 
-The package will be useful for browser applications that need to check uploaded images before further processing.
+```ts
+import { validateImage } from 'browser-image-validator';
 
-## Planned MVP
+const result = await validateImage(file, {
+    allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+    maxFileSizeBytes: 5 * 1024 * 1024, // 5 MB
+    dimensions: {
+        maxWidth: 4096,
+        maxHeight: 4096,
+    },
+});
 
-The first version will validate:
+if (result.valid) {
+    console.log('Image is valid:', result.image);
+    // { mimeType, sizeBytes, dimensions?: { width, height } }
+} else {
+    console.error('Validation failed:', result.errors);
+    // Array<{ code: ImageValidationErrorCode }>
+}
+```
 
-- file MIME type
-- file size
-- image width
-- image height
+See [docs/API.md](./docs/API.md) for the full API reference including all types, options, error codes, and behavior details.
 
-The result will be typed and suitable for TypeScript projects.
+## Features
 
-## Not included in MVP
+- Validates MIME type
+- Validates file size
+- Validates image width and height (via browser image decoding)
+- Fully typed — results are discriminated unions
+- Framework-agnostic
 
-- image resize
-- crop
-- preview generation
+## Out of scope
+
+- image resize / crop / preview generation
 - drag-and-drop
 - localization
-- multiple files validation
-- async queue
-- EXIF support
-- aspect ratio validation
-- content-based MIME validation
-- server-side image validation
-- upload logic
-- UI error messages
+- multiple files validation / async queue
+- EXIF / aspect ratio / content-based MIME validation
+- server-side validation / upload logic / UI error messages
 - React, Vue, or framework-specific integrations
+
+## Contributing
+
+Requires Node.js ≥ 22 (development/build toolchain only).
+
+```bash
+npm ci
+npm run test:run    # run tests once
+npm run test        # run tests in watch mode
+npm run typecheck   # TypeScript type check
+npm run lint        # ESLint
+npm run format      # Prettier
+npm run build       # build to dist/
+```
 
 ## License
 
