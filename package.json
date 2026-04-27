@@ -8,9 +8,11 @@
     "exports": {
         ".": {
             "types": "./dist/index.d.ts",
-            "import": "./dist/index.js"
+            "import": "./dist/index.js",
+            "default": "./dist/index.js"
         }
     },
+    "sideEffects": false,
     "files": [
         "dist/index.js",
         "dist/index.js.map",
@@ -19,9 +21,6 @@
         "README.md",
         "LICENSE"
     ],
-    "directories": {
-        "doc": "docs"
-    },
     "scripts": {
         "clean": "rimraf dist",
         "build": "npm run clean && tsc -p tsconfig.build.json",
