@@ -1,7 +1,7 @@
 {
     "name": "browser-image-validator",
     "version": "0.1.0",
-    "description": "Small TypeScript utility for validating browser image files by MIME type, file size, and image dimensions.",
+    "description": "Validate browser image files before upload by MIME type, file size, and dimensions.",
     "type": "module",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
@@ -41,9 +41,18 @@
     },
     "keywords": [
         "image",
+        "image-validator",
+        "browser-image",
         "validation",
         "browser",
         "file",
+        "file-validation",
+        "image-upload",
+        "upload-validation",
+        "client-side",
+        "frontend",
+        "image-dimensions",
+        "mime-validation",
         "typescript",
         "mime-type"
     ],
